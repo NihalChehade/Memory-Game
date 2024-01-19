@@ -1,10 +1,9 @@
 const gameContainer = document.getElementById("game");
 const startBtn = document.querySelector("#start");
 const buttonsDiv = document.querySelector("#buttonsDiv");
-const lowsetScoreSpan = document.querySelector("#lowest-score");
+const lowestScoreSpan = document.querySelector("#lowest-score");
 const restartBtn = document.querySelector("#restart");
 const scoreSpan = document.querySelector("#score");
-const scoreDiv = document.querySelector("#score-div");
 let clickedCardCount = 0;
 let clickedCardsArray = [];
 let score = 0;
@@ -16,11 +15,15 @@ const COLORS = [
   "green",
   "orange",
   "purple",
+  "pink",
+  "yellow",
   "red",
   "blue",
   "green",
   "orange",
-  "purple"
+  "purple",
+  "pink",
+  "yellow"
 ];
 
 // here is a helper function to shuffle an array
@@ -48,6 +51,15 @@ function shuffle(array) {
 
 let shuffledColors = shuffle(COLORS);
 
+function doublicateArray(value, len) {
+  var arr = [];
+  for (var i = 0; i < len; i++) {
+    arr.push(value);
+  }
+  return arr;
+}
+
+
 // this function loops over the array of colors
 // it creates a new div and gives it a class with the value of the color
 // it also adds an event listener for a click for each card
@@ -59,6 +71,7 @@ function createDivsForColors(colorArray) {
     // give it a class attribute for the value we are looping over
     newDiv.classList.add(color);
 
+
     // call a function handleCardClick when a div is clicked on
     newDiv.addEventListener("click", handleCardClick);
 
@@ -69,71 +82,71 @@ function createDivsForColors(colorArray) {
 
 // TODO: Implement this function!
 function handleCardClick(event) {
-  // const cardClicked = event.target;
   if (clickedCardCount < 2) {
-
+    console.log(event.target);
     switch (event.target.classList[0]) {
+      
       case 'red':
-
+        event.target.style.backgroundImage="none";
         event.target.style.backgroundColor = "red";
         break;
       case 'blue':
-
+        event.target.style.backgroundImage="none";
         event.target.style.backgroundColor = "blue";
         break;
       case 'green':
-
+        event.target.style.backgroundImage="none";
         event.target.style.backgroundColor = "green";
         break;
       case 'orange':
-
+        event.target.style.backgroundImage="none";
         event.target.style.backgroundColor = "orange";
         break;
       case 'purple':
-
+        event.target.style.backgroundImage="none";
         event.target.style.backgroundColor = "purple";
         break;
-
-      default:
-        event.target.style.backgroundColor = "grey";
+      case 'pink':
+        event.target.style.backgroundImage="none";
+        event.target.style.backgroundColor = "pink";
+        break;
+      case 'yellow':
+        event.target.style.backgroundImage="none";
+        event.target.style.backgroundColor = "yellow";
+        break;
     }
     cardClicked(event.target);
   }
 }
-function cardClicked(element) {
-  if (!element.classList.contains('clicked')) {
-    element.classList.add('clicked');
-    clickedCardsArray.push(element);
-    clickedCardCount++;
-  }
 
+function cardClicked(element) {
+  score++;
+  scoreSpan.innerText = "Your Score is " + score;
+  // if (!element.classList.contains('clicked')) {
+  //   element.classList.add('     ');
+  //   clickedCardsArray.push(element);
+  //   clickedCardCount++;
+  // }
+  clickedCardsArray.push(element);
+  clickedCardCount++;
   if (clickedCardsArray.length === 2) {
-    score++;
-    scoreSpan.innerText = "Your Score is " + score;
     setTimeout(function () {
       if (clickedCardsArray[0].classList[0] != clickedCardsArray[1].classList[0]) {
         // console.log(clickedCardCount);
         // console.log("length is two and different colors");
         for (let diff of clickedCardsArray) {
           diff.style.backgroundColor = "";
-          diff.classList.remove('clicked');
+          diff.style.backgroundImage="url(images/stars.jfif)";
+          // diff.classList.remove('clicked');
         }
-
-
-      } else {
-        for (let clicked of clickedCardsArray) {
-          clicked.classList.add('matched');
-
-        }
+      }
+      else {
         match++;
-
-
-        if (match === 5) {
+        if (match === 7) {
           if (localStorage.getItem("lowestScore") === null) {
             localStorage.setItem("lowestScore", score);
           } else if (score < parseInt(localStorage.getItem("lowestScore"))) {
             localStorage.setItem("lowestScore", score);
-
           }
           restartBtn.style.visibility = 'visible';
         }
@@ -142,7 +155,6 @@ function cardClicked(element) {
       clickedCardsArray = [];
     }, 1000);
   }
-
 }
 
 
@@ -151,37 +163,16 @@ buttonsDiv.addEventListener("click", function (e) {
   console.log(e.target);
   if (e.target === startBtn) {
     startBtn.style.visibility = 'hidden';
-    scoreDiv.style.visibility = "visible";
     createDivsForColors(shuffledColors);
 
     if (localStorage.getItem("lowestScore") != null) {
       const lowestScoreSaved = parseInt(localStorage.getItem("lowestScore"));
-      lowsetScoreSpan.innerText = "Best Score:" + lowestScoreSaved;
+      lowestScoreSpan.innerText = "Best Score:" + lowestScoreSaved;
     }
-
   } else if (e.target === restartBtn) {
     console.log("clicked restart");
-    // document.reload();
     location.reload();
     restartBtn.style.visibility = 'hidden';
   }
-
 })
-
-// if(score===5){
-//   const restartBtn=document.createElement("button");
-//   restartBtn.classList.add("button-82");
-//   restartBtn.innerText="RESTART GAME!";
-//   restartBtn.addEventListener("click", function(){
-//     location. reload();
-//   });
-//   buttonsDiv.append(restartBtn);
-// }
-
-
-// startBtn.addEventListener("click", function () {
-//   startBtn.style.visibility = 'hidden';
-//   createDivsForColors(shuffledColors)
-// });
-
 
